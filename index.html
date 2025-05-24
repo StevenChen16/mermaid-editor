@@ -83,21 +83,46 @@
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 32px;
+            border-radius: 24px;
+            padding: 40px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px var(--shadow-light);
+            box-shadow: 0 8px 32px var(--shadow-light), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .header-content:hover::before {
+            transform: translateX(0);
         }
 
         .title {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 800;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 50%, #ff6b6b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
+            text-align: center;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: brightness(1) saturate(1); }
+            100% { filter: brightness(1.1) saturate(1.2); }
         }
 
         .subtitle {
@@ -112,14 +137,21 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 20px;
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 16px 24px;
-            border-radius: 16px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 20px 28px;
+            border-radius: 20px;
             border: 1px solid var(--border-color);
-            margin-bottom: 24px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 20px var(--shadow-light), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .controls-bar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--shadow-medium), 0 1px 0 rgba(255, 255, 255, 0.15) inset;
         }
 
         .stats {
@@ -167,22 +199,23 @@
 
         .btn {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 12px 20px;
+            border-radius: 16px;
+            padding: 14px 24px;
             font-size: 14px;
             font-weight: 600;
             color: var(--text-primary);
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 2px 10px var(--shadow-light), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
         }
 
         .btn::before {
@@ -201,8 +234,9 @@
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--shadow-medium);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px var(--shadow-medium), 0 2px 0 rgba(255, 255, 255, 0.15) inset;
+            border-color: rgba(0, 122, 255, 0.3);
         }
 
         .btn:active {
@@ -247,14 +281,20 @@
 
         .panel {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 8px 32px var(--shadow-light);
+            box-shadow: 0 10px 40px var(--shadow-light), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px var(--shadow-medium), 0 2px 0 rgba(255, 255, 255, 0.15) inset;
         }
 
         .panel-header {
@@ -511,6 +551,58 @@
         ::-moz-selection {
             background: rgba(0, 122, 255, 0.3);
         }
+
+        /* Apple风格的动画增强 */
+        .container {
+            animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 磨砂玻璃效果增强 */
+        .card-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Apple式按钮悬停动画 */
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0056d3, #3a7bd5);
+            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.4);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #28a745, #40c057);
+            box-shadow: 0 15px 40px rgba(52, 199, 89, 0.4);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            box-shadow: 0 15px 40px rgba(255, 149, 0, 0.4);
+        }
+
+        /* 平滑的主题切换动画 */
+        * {
+            transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Safari-style focus rings */
+        .editor-textarea:focus,
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.25);
+        }
     </style>
 </head>
 <body>
@@ -553,6 +645,10 @@
             <button id="downloadPng" class="btn btn-success">
                 <span>🖼️</span>
                 <span data-lang-key="download-png">下载 PNG</span>
+            </button>
+            <button id="downloadPdf" class="btn btn-warning">
+                <span>📋</span>
+                <span data-lang-key="download-pdf">下载 PDF</span>
             </button>
             <button id="downloadMmd" class="btn btn-primary">
                 <span>📄</span>
@@ -647,6 +743,7 @@ graph TD
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     
     <script>
         // 国际化语言包
@@ -662,6 +759,7 @@ graph TD
                 'upload-file': '上传文件',
                 'download-svg': '下载 SVG',
                 'download-png': '下载 PNG',
+                'download-pdf': '下载 PDF',
                 'download-mmd': '下载 .mmd',
                 'clear': '清空代码',
                 'code-editor': '代码编辑器',
@@ -704,6 +802,7 @@ graph TD
                 'upload-file': 'Upload File',
                 'download-svg': 'Download SVG',
                 'download-png': 'Download PNG',
+                'download-pdf': 'Download PDF',
                 'download-mmd': 'Download .mmd',
                 'clear': 'Clear Code',
                 'code-editor': 'Code Editor',
@@ -911,6 +1010,7 @@ graph TD
             // 下载按钮
             document.getElementById('downloadSvg').addEventListener('click', () => downloadFile('svg'));
             document.getElementById('downloadPng').addEventListener('click', () => downloadFile('png'));
+            document.getElementById('downloadPdf').addEventListener('click', () => downloadFile('pdf'));
             document.getElementById('downloadMmd').addEventListener('click', () => downloadFile('mmd'));
 
             // 清空按钮
@@ -1214,38 +1314,202 @@ graph TD
                         URL.revokeObjectURL(url);
                         
                     } else if (type === 'png') {
+                        console.log('开始PNG导出...');
+                        
+                        // 改进的PNG导出方法
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
+                        
+                        if (!ctx) {
+                            showNotification('浏览器不支持Canvas，无法生成PNG', 'error');
+                            return;
+                        }
+                        
+                        // 获取SVG的实际尺寸
+                        const svgRect = svgElement.getBoundingClientRect();
+                        const svgWidth = svgElement.viewBox?.baseVal?.width || svgRect.width || 800;
+                        const svgHeight = svgElement.viewBox?.baseVal?.height || svgRect.height || 600;
+                        
+                        console.log(`SVG尺寸: ${svgWidth}x${svgHeight}`);
+                        
+                        // 设置高DPI输出
+                        const scale = 2;
+                        canvas.width = svgWidth * scale;
+                        canvas.height = svgHeight * scale;
+                        ctx.scale(scale, scale);
+                        
+                        // 直接使用SVG字符串而不是Blob URL（避免CORS问题）
+                        const svgClone = svgElement.cloneNode(true);
+                        svgClone.setAttribute('width', svgWidth);
+                        svgClone.setAttribute('height', svgHeight);
+                        
+                        const svgData = new XMLSerializer().serializeToString(svgClone);
+                        const svgDataUri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
+                        
                         const img = new Image();
                         
-                        const svgData = new XMLSerializer().serializeToString(svgElement);
-                        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-                        const url = URL.createObjectURL(svgBlob);
-                        
                         img.onload = () => {
-                            canvas.width = img.width * 2;
-                            canvas.height = img.height * 2;
-                            ctx.scale(2, 2);
-                            ctx.fillStyle = currentTheme === 'dark' ? '#1c1c1e' : 'white';
-                            ctx.fillRect(0, 0, canvas.width, canvas.height);
-                            ctx.drawImage(img, 0, 0);
-                            
-                            canvas.toBlob((blob) => {
-                                const link = document.createElement('a');
-                                link.href = URL.createObjectURL(blob);
-                                link.download = `mermaid-diagram-${Date.now()}.png`;
-                                link.click();
-                                URL.revokeObjectURL(link.href);
-                            });
-                            
-                            URL.revokeObjectURL(url);
+                            console.log('SVG图像加载成功，开始转换为PNG...');
+                            try {
+                                // 设置背景色
+                                ctx.fillStyle = currentTheme === 'dark' ? '#1c1c1e' : '#ffffff';
+                                ctx.fillRect(0, 0, svgWidth, svgHeight);
+                                
+                                // 绘制图像
+                                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+                                
+                                // 转换为PNG并下载
+                                canvas.toBlob((blob) => {
+                                    if (blob) {
+                                        console.log('PNG生成成功，文件大小:', blob.size);
+                                        const link = document.createElement('a');
+                                        link.href = URL.createObjectURL(blob);
+                                        link.download = `mermaid-diagram-${Date.now()}.png`;
+                                        link.style.display = 'none';
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        setTimeout(() => {
+                                            document.body.removeChild(link);
+                                            URL.revokeObjectURL(link.href);
+                                        }, 100);
+                                        showNotification(t('download-success'), 'success');
+                                    } else {
+                                        console.error('Canvas.toBlob返回null');
+                                        showNotification('PNG生成失败：无法创建图像数据', 'error');
+                                    }
+                                }, 'image/png', 1.0);
+                            } catch (error) {
+                                console.error('Canvas绘制错误:', error);
+                                showNotification('PNG生成失败：绘制错误', 'error');
+                            }
                         };
                         
-                        img.src = url;
+                        img.onerror = (error) => {
+                            console.error('SVG图像加载失败:', error);
+                            showNotification('PNG生成失败：SVG加载错误', 'error');
+                        };
+                        
+                        // 使用data URI避免CORS问题
+                        img.src = svgDataUri;
+                        
+                    } else if (type === 'pdf') {
+                        console.log('开始PDF导出...');
+                        
+                        // 检查jsPDF是否加载
+                        if (typeof window.jspdf === 'undefined') {
+                            showNotification('PDF库未加载，请刷新页面重试', 'error');
+                            return;
+                        }
+                        
+                        // 获取SVG的实际尺寸
+                        const svgRect = svgElement.getBoundingClientRect();
+                        const svgWidth = svgElement.viewBox?.baseVal?.width || svgRect.width || 800;
+                        const svgHeight = svgElement.viewBox?.baseVal?.height || svgRect.height || 600;
+                        
+                        console.log(`PDF导出 - SVG尺寸: ${svgWidth}x${svgHeight}`);
+                        
+                        // 创建Canvas进行SVG转换
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        if (!ctx) {
+                            showNotification('浏览器不支持Canvas，无法生成PDF', 'error');
+                            return;
+                        }
+                        
+                        // 设置Canvas尺寸（高DPI）
+                        const scale = 2;
+                        canvas.width = svgWidth * scale;
+                        canvas.height = svgHeight * scale;
+                        ctx.scale(scale, scale);
+                        
+                        // 准备SVG数据
+                        const svgClone = svgElement.cloneNode(true);
+                        svgClone.setAttribute('width', svgWidth);
+                        svgClone.setAttribute('height', svgHeight);
+                        
+                        const svgData = new XMLSerializer().serializeToString(svgClone);
+                        const svgDataUri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
+                        
+                        const img = new Image();
+                        
+                        img.onload = () => {
+                            console.log('SVG图像加载成功，开始生成PDF...');
+                            try {
+                                // 设置背景色
+                                ctx.fillStyle = currentTheme === 'dark' ? '#1c1c1e' : '#ffffff';
+                                ctx.fillRect(0, 0, svgWidth, svgHeight);
+                                
+                                // 绘制图像
+                                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+                                
+                                // 获取Canvas数据
+                                const imageData = canvas.toDataURL('image/png', 1.0);
+                                
+                                // 计算PDF页面尺寸（A4纸张，留边距）
+                                const { jsPDF } = window.jspdf;
+                                const pdf = new jsPDF();
+                                
+                                // A4页面尺寸（mm）
+                                const pageWidth = 210;
+                                const pageHeight = 297;
+                                const margin = 20;
+                                const availableWidth = pageWidth - 2 * margin;
+                                const availableHeight = pageHeight - 2 * margin;
+                                
+                                // 计算图像在PDF中的尺寸，保持宽高比
+                                const aspectRatio = svgWidth / svgHeight;
+                                let pdfWidth, pdfHeight;
+                                
+                                if (aspectRatio > availableWidth / availableHeight) {
+                                    // 图像较宽，以宽度为准
+                                    pdfWidth = availableWidth;
+                                    pdfHeight = availableWidth / aspectRatio;
+                                } else {
+                                    // 图像较高，以高度为准
+                                    pdfHeight = availableHeight;
+                                    pdfWidth = availableHeight * aspectRatio;
+                                }
+                                
+                                // 居中放置
+                                const x = (pageWidth - pdfWidth) / 2;
+                                const y = (pageHeight - pdfHeight) / 2;
+                                
+                                // 添加图像到PDF
+                                pdf.addImage(imageData, 'PNG', x, y, pdfWidth, pdfHeight);
+                                
+                                // 添加标题和时间戳
+                                pdf.setFontSize(10);
+                                pdf.setTextColor(128, 128, 128);
+                                const timestamp = new Date().toLocaleString();
+                                pdf.text(`Generated by Mermaid Editor - ${timestamp}`, margin, pageHeight - 10);
+                                
+                                // 保存PDF
+                                const filename = `mermaid-diagram-${Date.now()}.pdf`;
+                                pdf.save(filename);
+                                
+                                console.log('PDF生成成功');
+                                showNotification(t('download-success'), 'success');
+                                
+                            } catch (error) {
+                                console.error('PDF生成错误:', error);
+                                showNotification('PDF生成失败：' + error.message, 'error');
+                            }
+                        };
+                        
+                        img.onerror = (error) => {
+                            console.error('SVG图像加载失败:', error);
+                            showNotification('PDF生成失败：SVG加载错误', 'error');
+                        };
+                        
+                        img.src = svgDataUri;
                     }
                 }
                 
-                showNotification(t('download-success'), 'success');
+                // SVG和MMD下载的成功通知
+                if (type === 'svg' || type === 'mmd') {
+                    showNotification(t('download-success'), 'success');
+                }
                 
             } catch (error) {
                 showNotification(`${t('download-failed')}: ${error.message}`, 'error');
