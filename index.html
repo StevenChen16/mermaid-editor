@@ -1314,10 +1314,24 @@ graph TD
             
             if (theme === 'dark') {
                 themeIcon.textContent = '☀️';
-                if (themeName) themeName.setAttribute('data-lang-key', 'light-mode');
+                if (themeName) {
+                    themeName.setAttribute('data-lang-key', 'light-mode');
+                    // 更新文本内容
+                    const key = 'light-mode';
+                    if (i18n[currentLang] && i18n[currentLang][key]) {
+                        themeName.textContent = i18n[currentLang][key];
+                    }
+                }
             } else {
                 themeIcon.textContent = '🌙';
-                if (themeName) themeName.setAttribute('data-lang-key', 'dark-mode');
+                if (themeName) {
+                    themeName.setAttribute('data-lang-key', 'dark-mode');
+                    // 更新文本内容
+                    const key = 'dark-mode';
+                    if (i18n[currentLang] && i18n[currentLang][key]) {
+                        themeName.textContent = i18n[currentLang][key];
+                    }
+                }
             }
             
             // 如果Mermaid已加载，重新初始化主题
