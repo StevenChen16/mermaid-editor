@@ -4,6 +4,8 @@ A modern, intuitive web-based Mermaid diagram editor with live preview and multi
 
 一个现代化、直观的基于Web的Mermaid图表编辑器，支持实时预览和多种导出选项。
 
+🌐 **[在线使用 | Try Online](https://mermaid.stevenchen.site/)**
+
 ## Features | 功能特点
 
 - 🔄 Live Preview | 实时预览
