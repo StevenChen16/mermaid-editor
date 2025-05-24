@@ -147,6 +147,8 @@
             margin-bottom: 28px;
             box-shadow: 0 4px 20px var(--shadow-light), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: visible;
         }
 
         .controls-bar:hover {
@@ -166,6 +168,8 @@
             display: flex;
             gap: 12px;
             align-items: center;
+            position: relative;
+            z-index: 1000;
         }
 
         .toggle-button {
@@ -664,6 +668,83 @@
                 flex-direction: column;
                 gap: 12px;
             }
+            
+            /* 移动端语言下拉框回到下方 */
+            .lang-dropdown {
+                top: 100%;
+                left: auto;
+                right: 0;
+                margin-left: 0;
+                margin-top: 8px;
+                transform: translateY(-10px);
+            }
+            
+            .lang-dropdown.show {
+                transform: translateY(0);
+            }
+        }
+
+        /* 语言选择器样式 */
+        .language-selector {
+            position: relative;
+            display: inline-block;
+            z-index: 10000;
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            margin-left: 12px;
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px var(--shadow-medium);
+            z-index: 9999;
+            min-width: 160px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .lang-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .lang-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-option:first-child {
+            border-radius: 15px 15px 0 0;
+        }
+
+        .lang-option:last-child {
+            border-radius: 0 0 15px 15px;
+        }
+
+        .lang-option:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .lang-option.active {
+            background: var(--accent-blue);
+            color: white;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -687,10 +768,21 @@
                     <span id="themeIcon">🌙</span>
                     <span data-lang-key="dark-mode">暗色模式</span>
                 </button>
-                <button id="langToggle" class="toggle-button">
-                    <span id="langIcon">🌐</span>
-                    <span id="langText">English</span>
-                </button>
+                <div class="language-selector">
+                    <button id="langToggle" class="toggle-button">
+                        <span id="langIcon">🌐</span>
+                        <span id="langText">English</span>
+                    </button>
+                    <div id="langDropdown" class="lang-dropdown">
+                        <div class="lang-option" data-lang="zh-CN">🇨🇳 中文</div>
+                        <div class="lang-option" data-lang="en">🇺🇸 English</div>
+                        <div class="lang-option" data-lang="fr">🇫🇷 Français</div>
+                        <div class="lang-option" data-lang="es">🇪🇸 Español</div>
+                        <div class="lang-option" data-lang="ja">🇯🇵 日本語</div>
+                        <div class="lang-option" data-lang="de">🇩🇪 Deutsch</div>
+                        <div class="lang-option" data-lang="ru">🇷🇺 Русский</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -912,6 +1004,231 @@ graph TD
                 'no-code': 'Please enter code first',
                 'author-info': 'Made with ❤️ by Steven Chen',
                 'github-link': 'GitHub'
+            },
+            'fr': {
+                'subtitle': 'Créez de beaux diagrammes de flux, diagrammes de séquence et plus - Aperçu en temps réel, export en un clic',
+                'lines': 'Lignes',
+                'chars': 'Caractères',
+                'status': 'Statut',
+                'ready': 'Prêt',
+                'dark-mode': 'Mode sombre',
+                'light-mode': 'Mode clair',
+                'upload-file': 'Télécharger fichier',
+                'download-svg': 'Télécharger SVG',
+                'download-png': 'Télécharger PNG',
+                'download-pdf': 'Télécharger PDF',
+                'download-mmd': 'Télécharger .mmd',
+                'clear': 'Effacer le code',
+                'code-editor': 'Éditeur de code',
+                'rendering': 'Rendu en cours',
+                'live-preview': 'Aperçu en direct',
+                'preview-placeholder': 'Entrez le code à gauche pour voir l\'aperçu',
+                'examples-title': '📚 Modèles d\'exemple',
+                'example-flowchart': 'Diagramme de flux',
+                'example-flowchart-desc': 'Exemple de diagramme de flux basique montrant les décisions et processus',
+                'example-sequence': 'Diagramme de séquence',
+                'example-sequence-desc': 'Affiche les interactions et la temporisation entre systèmes',
+                'example-gantt': 'Diagramme de Gantt',
+                'example-gantt-desc': 'Planification de chronologie de projet et gestion des progrès',
+                'example-class': 'Diagramme de classe',
+                'example-class-desc': 'Conception orientée objet et relations de classe',
+                'example-state': 'Diagramme d\'état',
+                'example-state-desc': 'Transitions d\'état et cycle de vie',
+                'example-pie': 'Diagramme circulaire',
+                'example-pie-desc': 'Affichage de proportion et distribution de données',
+                'code-placeholder': 'Entrez le code Mermaid ici...\n\nExemple:\ngraph TD\n    A[Début] --> B[Traiter les données]\n    B --> C{Décision}\n    C -->|Oui| D[Action A]\n    C -->|Non| E[Action B]\n    D --> F[Fin]\n    E --> F',
+                'file-uploaded': 'Fichier téléchargé avec succès!',
+                'file-upload-failed': 'Échec du téléchargement de fichier',
+                'render-success': 'Diagramme rendu avec succès!',
+                'render-failed': 'Échec du rendu',
+                'download-success': 'Téléchargement réussi!',
+                'download-failed': 'Échec du téléchargement',
+                'code-cleared': 'Code effacé',
+                'confirm-clear': 'Êtes-vous sûr de vouloir effacer tout le code?',
+                'no-diagram': 'Veuillez d\'abord générer un diagramme',
+                'no-code': 'Veuillez d\'abord entrer le code',
+                'author-info': 'Créé avec ❤️ par Steven Chen',
+                'github-link': 'GitHub'
+            },
+            'es': {
+                'subtitle': 'Crea hermosos diagramas de flujo, diagramas de secuencia y más - Vista previa en vivo, exportación con un clic',
+                'lines': 'Líneas',
+                'chars': 'Caracteres',
+                'status': 'Estado',
+                'ready': 'Listo',
+                'dark-mode': 'Modo oscuro',
+                'light-mode': 'Modo claro',
+                'upload-file': 'Subir archivo',
+                'download-svg': 'Descargar SVG',
+                'download-png': 'Descargar PNG',
+                'download-pdf': 'Descargar PDF',
+                'download-mmd': 'Descargar .mmd',
+                'clear': 'Limpiar código',
+                'code-editor': 'Editor de código',
+                'rendering': 'Renderizando',
+                'live-preview': 'Vista previa en vivo',
+                'preview-placeholder': 'Ingresa código a la izquierda para ver la vista previa',
+                'examples-title': '📚 Plantillas de ejemplo',
+                'example-flowchart': 'Diagrama de flujo',
+                'example-flowchart-desc': 'Ejemplo básico de diagrama de flujo mostrando decisiones y procesos',
+                'example-sequence': 'Diagrama de secuencia',
+                'example-sequence-desc': 'Muestra interacciones y tiempo entre sistemas',
+                'example-gantt': 'Diagrama de Gantt',
+                'example-gantt-desc': 'Planificación de cronograma del proyecto y gestión de progreso',
+                'example-class': 'Diagrama de clase',
+                'example-class-desc': 'Diseño orientado a objetos y relaciones de clase',
+                'example-state': 'Diagrama de estado',
+                'example-state-desc': 'Transiciones de estado y ciclo de vida',
+                'example-pie': 'Gráfico circular',
+                'example-pie-desc': 'Visualización de proporción y distribución de datos',
+                'code-placeholder': 'Ingresa código Mermaid aquí...\n\nEjemplo:\ngraph TD\n    A[Inicio] --> B[Procesar datos]\n    B --> C{Decisión}\n    C -->|Sí| D[Acción A]\n    C -->|No| E[Acción B]\n    D --> F[Fin]\n    E --> F',
+                'file-uploaded': '¡Archivo subido exitosamente!',
+                'file-upload-failed': 'Error al subir archivo',
+                'render-success': '¡Diagrama renderizado exitosamente!',
+                'render-failed': 'Error de renderizado',
+                'download-success': '¡Descarga exitosa!',
+                'download-failed': 'Error de descarga',
+                'code-cleared': 'Código limpiado',
+                'confirm-clear': '¿Estás seguro de que quieres limpiar todo el código?',
+                'no-diagram': 'Por favor genera un diagrama primero',
+                'no-code': 'Por favor ingresa código primero',
+                'author-info': 'Hecho con ❤️ por Steven Chen',
+                'github-link': 'GitHub'
+            },
+            'ja': {
+                'subtitle': '美しいフローチャート、シーケンス図などを作成 - リアルタイムプレビュー、ワンクリックエクスポート',
+                'lines': '行数',
+                'chars': '文字数',
+                'status': 'ステータス',
+                'ready': '準備完了',
+                'dark-mode': 'ダークモード',
+                'light-mode': 'ライトモード',
+                'upload-file': 'ファイルアップロード',
+                'download-svg': 'SVGダウンロード',
+                'download-png': 'PNGダウンロード',
+                'download-pdf': 'PDFダウンロード',
+                'download-mmd': '.mmdダウンロード',
+                'clear': 'コードクリア',
+                'code-editor': 'コードエディタ',
+                'rendering': 'レンダリング中',
+                'live-preview': 'ライブプレビュー',
+                'preview-placeholder': '左側にコードを入力してプレビューを表示',
+                'examples-title': '📚 サンプルテンプレート',
+                'example-flowchart': 'フローチャート',
+                'example-flowchart-desc': '決定とプロセスを示す基本的なフローチャートの例',
+                'example-sequence': 'シーケンス図',
+                'example-sequence-desc': 'システム間の相互作用とタイミングを表示',
+                'example-gantt': 'ガントチャート',
+                'example-gantt-desc': 'プロジェクトのタイムライン計画と進捗管理',
+                'example-class': 'クラス図',
+                'example-class-desc': 'オブジェクト指向設計とクラス関係',
+                'example-state': 'ステート図',
+                'example-state-desc': '状態遷移とライフサイクル',
+                'example-pie': '円グラフ',
+                'example-pie-desc': 'データの比率と分布の表示',
+                'code-placeholder': 'ここにMermaidコードを入力...\n\n例:\ngraph TD\n    A[開始] --> B[データ処理]\n    B --> C{判定}\n    C -->|はい| D[アクションA]\n    C -->|いいえ| E[アクションB]\n    D --> F[終了]\n    E --> F',
+                'file-uploaded': 'ファイルのアップロードが成功しました！',
+                'file-upload-failed': 'ファイルのアップロードに失敗しました',
+                'render-success': '図表のレンダリングが成功しました！',
+                'render-failed': 'レンダリングに失敗しました',
+                'download-success': 'ダウンロードが成功しました！',
+                'download-failed': 'ダウンロードに失敗しました',
+                'code-cleared': 'コードをクリアしました',
+                'confirm-clear': '本当にすべてのコードをクリアしますか？',
+                'no-diagram': '最初に図表を生成してください',
+                'no-code': '最初にコードを入力してください',
+                'author-info': 'Steven Chen が ❤️ をこめて制作',
+                'github-link': 'GitHub'
+            },
+            'de': {
+                'subtitle': 'Erstellen Sie schöne Flussdiagramme, Sequenzdiagramme und mehr - Live-Vorschau, Ein-Klick-Export',
+                'lines': 'Zeilen',
+                'chars': 'Zeichen',
+                'status': 'Status',
+                'ready': 'Bereit',
+                'dark-mode': 'Dunkler Modus',
+                'light-mode': 'Heller Modus',
+                'upload-file': 'Datei hochladen',
+                'download-svg': 'SVG herunterladen',
+                'download-png': 'PNG herunterladen',
+                'download-pdf': 'PDF herunterladen',
+                'download-mmd': '.mmd herunterladen',
+                'clear': 'Code löschen',
+                'code-editor': 'Code-Editor',
+                'rendering': 'Wird gerendert',
+                'live-preview': 'Live-Vorschau',
+                'preview-placeholder': 'Code links eingeben um Vorschau zu sehen',
+                'examples-title': '📚 Beispielvorlagen',
+                'example-flowchart': 'Flussdiagramm',
+                'example-flowchart-desc': 'Grundlegendes Flussdiagramm-Beispiel mit Entscheidungen und Prozessen',
+                'example-sequence': 'Sequenzdiagramm',
+                'example-sequence-desc': 'Zeigt Interaktionen und Timing zwischen Systemen',
+                'example-gantt': 'Gantt-Diagramm',
+                'example-gantt-desc': 'Projekt-Zeitplan-Planung und Fortschrittsverwaltung',
+                'example-class': 'Klassendiagramm',
+                'example-class-desc': 'Objektorientiertes Design und Klassenbeziehungen',
+                'example-state': 'Zustandsdiagramm',
+                'example-state-desc': 'Zustandsübergänge und Lebenszyklus',
+                'example-pie': 'Kreisdiagramm',
+                'example-pie-desc': 'Datenanteil und Verteilungsanzeige',
+                'code-placeholder': 'Mermaid-Code hier eingeben...\n\nBeispiel:\ngraph TD\n    A[Start] --> B[Daten verarbeiten]\n    B --> C{Entscheidung}\n    C -->|Ja| D[Aktion A]\n    C -->|Nein| E[Aktion B]\n    D --> F[Ende]\n    E --> F',
+                'file-uploaded': 'Datei erfolgreich hochgeladen!',
+                'file-upload-failed': 'Datei-Upload fehlgeschlagen',
+                'render-success': 'Diagramm erfolgreich gerendert!',
+                'render-failed': 'Rendering fehlgeschlagen',
+                'download-success': 'Download erfolgreich!',
+                'download-failed': 'Download fehlgeschlagen',
+                'code-cleared': 'Code gelöscht',
+                'confirm-clear': 'Sind Sie sicher, dass Sie den gesamten Code löschen möchten?',
+                'no-diagram': 'Bitte erstellen Sie zuerst ein Diagramm',
+                'no-code': 'Bitte geben Sie zuerst Code ein',
+                'author-info': 'Mit ❤️ erstellt von Steven Chen',
+                'github-link': 'GitHub'
+            },
+            'ru': {
+                'subtitle': 'Создавайте красивые блок-схемы, диаграммы последовательности и многое другое - Живой предпросмотр, экспорт одним кликом',
+                'lines': 'Строки',
+                'chars': 'Символы',
+                'status': 'Статус',
+                'ready': 'Готово',
+                'dark-mode': 'Тёмная тема',
+                'light-mode': 'Светлая тема',
+                'upload-file': 'Загрузить файл',
+                'download-svg': 'Скачать SVG',
+                'download-png': 'Скачать PNG',
+                'download-pdf': 'Скачать PDF',
+                'download-mmd': 'Скачать .mmd',
+                'clear': 'Очистить код',
+                'code-editor': 'Редактор кода',
+                'rendering': 'Отрисовка',
+                'live-preview': 'Живой предпросмотр',
+                'preview-placeholder': 'Введите код слева для просмотра',
+                'examples-title': '📚 Примеры шаблонов',
+                'example-flowchart': 'Блок-схема',
+                'example-flowchart-desc': 'Базовый пример блок-схемы с решениями и процессами',
+                'example-sequence': 'Диаграмма последовательности',
+                'example-sequence-desc': 'Показывает взаимодействия и синхронизацию между системами',
+                'example-gantt': 'Диаграмма Ганта',
+                'example-gantt-desc': 'Планирование временной шкалы проекта и управление прогрессом',
+                'example-class': 'Диаграмма классов',
+                'example-class-desc': 'Объектно-ориентированное проектирование и отношения классов',
+                'example-state': 'Диаграмма состояний',
+                'example-state-desc': 'Переходы состояний и жизненный цикл',
+                'example-pie': 'Круговая диаграмма',
+                'example-pie-desc': 'Отображение пропорций и распределения данных',
+                'code-placeholder': 'Введите код Mermaid здесь...\n\nПример:\ngraph TD\n    A[Начало] --> B[Обработка данных]\n    B --> C{Решение}\n    C -->|Да| D[Действие A]\n    C -->|Нет| E[Действие B]\n    D --> F[Конец]\n    E --> F',
+                'file-uploaded': 'Файл успешно загружен!',
+                'file-upload-failed': 'Ошибка загрузки файла',
+                'render-success': 'Диаграмма успешно отрисована!',
+                'render-failed': 'Ошибка отрисовки',
+                'download-success': 'Скачивание успешно!',
+                'download-failed': 'Ошибка скачивания',
+                'code-cleared': 'Код очищен',
+                'confirm-clear': 'Вы уверены, что хотите очистить весь код?',
+                'no-diagram': 'Пожалуйста, сначала создайте диаграмму',
+                'no-code': 'Пожалуйста, сначала введите код',
+                'author-info': 'Создано с ❤️ Steven Chen',
+                'github-link': 'GitHub'
             }
         };
 
@@ -1016,11 +1333,27 @@ graph TD
             }
         }
 
+        // 语言名称映射
+        const languageNames = {
+            'zh-CN': '🇨🇳 中文',
+            'en': '🇺🇸 English',
+            'fr': '🇫🇷 Français', 
+            'es': '🇪🇸 Español',
+            'ja': '🇯🇵 日本語',
+            'de': '🇩🇪 Deutsch',
+            'ru': '🇷🇺 Русский'
+        };
+
         // 应用语言
         function applyLanguage(lang) {
             document.documentElement.lang = lang;
             const langText = document.getElementById('langText');
-            langText.textContent = lang === 'zh-CN' ? 'English' : '中文';
+            langText.textContent = languageNames[lang] || languageNames['en'];
+            
+            // 更新活动语言选项
+            document.querySelectorAll('.lang-option').forEach(option => {
+                option.classList.toggle('active', option.dataset.lang === lang);
+            });
             
             // 更新所有带有data-lang-key的元素
             document.querySelectorAll('[data-lang-key]').forEach(element => {
@@ -1078,10 +1411,30 @@ graph TD
             });
 
             // 语言切换
-            document.getElementById('langToggle').addEventListener('click', () => {
-                currentLang = currentLang === 'zh-CN' ? 'en' : 'zh-CN';
-                localStorage.setItem('mermaid-editor-lang', currentLang);
-                applyLanguage(currentLang);
+            const langToggle = document.getElementById('langToggle');
+            const langDropdown = document.getElementById('langDropdown');
+            
+            langToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                langDropdown.classList.toggle('show');
+            });
+
+            // 语言选项点击
+            document.querySelectorAll('.lang-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const selectedLang = option.dataset.lang;
+                    if (selectedLang !== currentLang) {
+                        currentLang = selectedLang;
+                        localStorage.setItem('mermaid-editor-lang', currentLang);
+                        applyLanguage(currentLang);
+                    }
+                    langDropdown.classList.remove('show');
+                });
+            });
+
+            // 点击外部关闭下拉菜单
+            document.addEventListener('click', () => {
+                langDropdown.classList.remove('show');
             });
 
             // 代码编辑器输入事件
@@ -1254,7 +1607,37 @@ graph TD
     "Python" : 23.15
     "Java" : 18.47
     "C++" : 8.32
-    "Others" : 7.10`
+    "Others" : 7.10`,
+                'fr': `pie title Utilisation des langages de programmation
+    "JavaScript" : 42.96
+    "Python" : 23.15
+    "Java" : 18.47
+    "C++" : 8.32
+    "Autres" : 7.10`,
+                'es': `pie title Uso de lenguajes de programación
+    "JavaScript" : 42.96
+    "Python" : 23.15
+    "Java" : 18.47
+    "C++" : 8.32
+    "Otros" : 7.10`,
+                'ja': `pie title プログラミング言語使用率
+    "JavaScript" : 42.96
+    "Python" : 23.15
+    "Java" : 18.47
+    "C++" : 8.32
+    "その他" : 7.10`,
+                'de': `pie title Verwendung von Programmiersprachen
+    "JavaScript" : 42.96
+    "Python" : 23.15
+    "Java" : 18.47
+    "C++" : 8.32
+    "Andere" : 7.10`,
+                'ru': `pie title Использование языков программирования
+    "JavaScript" : 42.96
+    "Python" : 23.15
+    "Java" : 18.47
+    "C++" : 8.32
+    "Другие" : 7.10`
             }
         };
 
@@ -1656,11 +2039,18 @@ graph TD
 
         // 加载示例
         function loadExample(type) {
-            if (examples[type] && examples[type][currentLang]) {
-                codeEditor.value = examples[type][currentLang];
-                updateStats();
-                renderDiagram();
-                showNotification(`${t('example-' + type)} ${t('render-success')}`, 'success');
+            if (examples[type]) {
+                // 优先使用当前语言，如果不存在则使用英语，最后使用中文
+                const exampleCode = examples[type][currentLang] || 
+                                   examples[type]['en'] || 
+                                   examples[type]['zh-CN'];
+                
+                if (exampleCode) {
+                    codeEditor.value = exampleCode;
+                    updateStats();
+                    renderDiagram();
+                    showNotification(`${t('example-' + type)} ${t('render-success')}`, 'success');
+                }
             }
         }
 
