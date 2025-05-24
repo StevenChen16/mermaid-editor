@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Theme */
+            --bg-primary: #f2f2f7;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f2f2f7;
+            --text-primary: #000000;
+            --text-secondary: #3c3c43;
+            --text-tertiary: #8e8e93;
+            --accent-blue: #007aff;
+            --accent-green: #34c759;
+            --accent-orange: #ff9500;
+            --accent-red: #ff3b30;
+            --accent-purple: #af52de;
+            --border-color: #c6c6c8;
+            --shadow-light: rgba(0, 0, 0, 0.04);
+            --shadow-medium: rgba(0, 0, 0, 0.08);
+            --shadow-heavy: rgba(0, 0, 0, 0.12);
+            --blur-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme */
+            --bg-primary: #000000;
+            --bg-secondary: #1c1c1e;
+            --bg-tertiary: #2c2c2e;
+            --text-primary: #ffffff;
+            --text-secondary: #ffffff;
+            --text-tertiary: #8e8e93;
+            --accent-blue: #0a84ff;
+            --accent-green: #30d158;
+            --accent-orange: #ff9f0a;
+            --accent-red: #ff453a;
+            --accent-purple: #bf5af2;
+            --border-color: #38383a;
+            --shadow-light: rgba(0, 0, 0, 0.3);
+            --shadow-medium: rgba(0, 0, 0, 0.4);
+            --shadow-heavy: rgba(0, 0, 0, 0.5);
+            --blur-bg: rgba(28, 28, 30, 0.8);
+            --card-bg: rgba(28, 28, 30, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px var(--shadow-light);
+        }
+
+        .title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 16px 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        .theme-language-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .toggle-button {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-button:hover {
+            background: var(--accent-blue);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-medium);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), #4dabf7);
+            color: white;
+            border: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-green), #51cf66);
+            color: white;
+            border: none;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--accent-orange), #ffa94d);
+            color: white;
+            border: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--accent-red), #ff6b6b);
+            color: white;
+            border: none;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            height: calc(100vh - 320px);
+            min-height: 500px;
+        }
+
+        .panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 32px var(--shadow-light);
+        }
+
+        .panel-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-content {
+            flex: 1;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .editor-textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            resize: none;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 16px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-radius: 12px;
+            outline: none;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .editor-textarea:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .preview-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            overflow: auto;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .preview-placeholder {
+            color: var(--text-tertiary);
+            font-size: 16px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-weight: 500;
+            font-size: 14px;
+            display: none;
+            border: 1px solid;
+        }
+
+        .message.error {
+            background: rgba(255, 59, 48, 0.1);
+            color: var(--accent-red);
+            border-color: rgba(255, 59, 48, 0.2);
+        }
+
+        .message.success {
+            background: rgba(52, 199, 89, 0.1);
+            color: var(--accent-green);
+            border-color: rgba(52, 199, 89, 0.2);
+        }
+
+        .loading {
+            display: none;
+            color: var(--accent-blue);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .loading::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        .examples {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 24px;
+            box-shadow: 0 8px 32px var(--shadow-light);
+        }
+
+        .examples h3 {
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .example-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .example-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px var(--shadow-medium);
+            border-color: var(--accent-blue);
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .example-desc {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid;
+            box-shadow: 0 8px 32px var(--shadow-medium);
+            max-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: rgba(52, 199, 89, 0.9);
+            color: white;
+            border-color: rgba(52, 199, 89, 0.3);
+        }
+
+        .notification.error {
+            background: rgba(255, 59, 48, 0.9);
+            color: white;
+            border-color: rgba(255, 59, 48, 0.3);
+        }
+
+        .notification.info {
+            background: rgba(0, 122, 255, 0.9);
+            color: white;
+            border-color: rgba(0, 122, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .panel {
+                min-height: 350px;
+            }
+            
+            .container {
+                padding: 16px;
+            }
+
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+
+            .theme-language-controls {
+                justify-content: center;
+            }
+        }
+
+        /* Mermaid图表在暗色主题下的样式调整 */
+        [data-theme="dark"] .preview-container svg {
+            filter: brightness(0.9) contrast(1.1);
+        }
+
+        /* 滚动条美化 - Apple风格 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-tertiary);
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* 选择文本时的颜色 */
+        ::selection {
+            background: rgba(0, 122, 255, 0.3);
+        }
+
+        ::-moz-selection {
+            background: rgba(0, 122, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1 class="title">🌊 Mermaid Editor</h1>
+                <p class="subtitle" data-lang-key="subtitle">创建精美的流程图、时序图和各种图表 - 实时预览，一键导出</p>
+            </div>
+        </div>
+
+        <div class="controls-bar">
+            <div class="stats">
+                <span><span data-lang-key="lines">行数</span>: <span id="lineCount">0</span></span>
+                <span><span data-lang-key="chars">字符</span>: <span id="charCount">0</span></span>
+                <span><span data-lang-key="status">状态</span>: <span id="renderStatus" data-lang-key="ready">就绪</span></span>
+            </div>
+            <div class="theme-language-controls">
+                <button id="themeToggle" class="toggle-button">
+                    <span id="themeIcon">🌙</span>
+                    <span data-lang-key="dark-mode">暗色模式</span>
+                </button>
+                <button id="langToggle" class="toggle-button">
+                    <span id="langIcon">🌐</span>
+                    <span id="langText">English</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <label for="fileInput" class="btn btn-primary">
+                <span>📁</span>
+                <span data-lang-key="upload-file">上传文件</span>
+                <input type="file" id="fileInput" class="file-input" accept=".mmd,.txt">
+            </label>
+            <button id="downloadSvg" class="btn btn-success">
+                <span>💾</span>
+                <span data-lang-key="download-svg">下载 SVG</span>
+            </button>
+            <button id="downloadPng" class="btn btn-success">
+                <span>🖼️</span>
+                <span data-lang-key="download-png">下载 PNG</span>
+            </button>
+            <button id="downloadMmd" class="btn btn-primary">
+                <span>📄</span>
+                <span data-lang-key="download-mmd">下载 .mmd</span>
+            </button>
+            <button id="clearBtn" class="btn btn-danger">
+                <span>🗑️</span>
+                <span data-lang-key="clear">清空代码</span>
+            </button>
+        </div>
+
+        <div class="main-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <span>
+                        <span>✏️</span>
+                        <span data-lang-key="code-editor">代码编辑器</span>
+                    </span>
+                    <span class="loading" id="loading" data-lang-key="rendering">渲染中</span>
+                </div>
+                <div class="panel-content">
+                    <div id="errorMessage" class="message error"></div>
+                    <div id="successMessage" class="message success"></div>
+                    <textarea id="mermaidCode" class="editor-textarea" data-lang-key="code-placeholder" placeholder="在此输入 Mermaid 代码...
+
+示例：
+graph TD
+    A[开始] --> B[处理数据]
+    B --> C{判断条件}
+    C -->|是| D[执行操作A]
+    C -->|否| E[执行操作B]
+    D --> F[结束]
+    E --> F">graph TD
+    A[开始] --> B[处理数据]
+    B --> C{判断条件}
+    C -->|是| D[执行操作A]
+    C -->|否| E[执行操作B]
+    D --> F[结束]
+    E --> F</textarea>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span>
+                        <span>👁️</span>
+                        <span data-lang-key="live-preview">实时预览</span>
+                    </span>
+                </div>
+                <div class="panel-content">
+                    <div id="mermaidPreview" class="preview-container">
+                        <div class="preview-placeholder" data-lang-key="preview-placeholder">在左侧输入代码查看预览</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples">
+            <h3 data-lang-key="examples-title">📚 示例模板</h3>
+            <div class="example-grid">
+                <div class="example-item" data-example="flowchart">
+                    <div class="example-title">🔄 <span data-lang-key="example-flowchart">流程图</span></div>
+                    <div class="example-desc" data-lang-key="example-flowchart-desc">基础流程图示例，展示决策和处理流程</div>
+                </div>
+                <div class="example-item" data-example="sequence">
+                    <div class="example-title">⏱️ <span data-lang-key="example-sequence">时序图</span></div>
+                    <div class="example-desc" data-lang-key="example-sequence-desc">展示系统间交互和时间顺序</div>
+                </div>
+                <div class="example-item" data-example="gantt">
+                    <div class="example-title">📅 <span data-lang-key="example-gantt">甘特图</span></div>
+                    <div class="example-desc" data-lang-key="example-gantt-desc">项目时间规划和进度管理</div>
+                </div>
+                <div class="example-item" data-example="class">
+                    <div class="example-title">🏗️ <span data-lang-key="example-class">类图</span></div>
+                    <div class="example-desc" data-lang-key="example-class-desc">面向对象设计和类关系</div>
+                </div>
+                <div class="example-item" data-example="state">
+                    <div class="example-title">🔄 <span data-lang-key="example-state">状态图</span></div>
+                    <div class="example-desc" data-lang-key="example-state-desc">状态转换和生命周期</div>
+                </div>
+                <div class="example-item" data-example="pie">
+                    <div class="example-title">🥧 <span data-lang-key="example-pie">饼图</span></div>
+                    <div class="example-desc" data-lang-key="example-pie-desc">数据占比和分布展示</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知组件 -->
+    <div id="notification" class="notification">
+        <div id="notificationMessage"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    
+    <script>
+        // 国际化语言包
+        const i18n = {
+            'zh-CN': {
+                'subtitle': '创建精美的流程图、时序图和各种图表 - 实时预览，一键导出',
+                'lines': '行数',
+                'chars': '字符',
+                'status': '状态',
+                'ready': '就绪',
+                'dark-mode': '暗色模式',
+                'light-mode': '浅色模式',
+                'upload-file': '上传文件',
+                'download-svg': '下载 SVG',
+                'download-png': '下载 PNG',
+                'download-mmd': '下载 .mmd',
+                'clear': '清空代码',
+                'code-editor': '代码编辑器',
+                'rendering': '渲染中',
+                'live-preview': '实时预览',
+                'preview-placeholder': '在左侧输入代码查看预览',
+                'examples-title': '📚 示例模板',
+                'example-flowchart': '流程图',
+                'example-flowchart-desc': '基础流程图示例，展示决策和处理流程',
+                'example-sequence': '时序图',
+                'example-sequence-desc': '展示系统间交互和时间顺序',
+                'example-gantt': '甘特图',
+                'example-gantt-desc': '项目时间规划和进度管理',
+                'example-class': '类图',
+                'example-class-desc': '面向对象设计和类关系',
+                'example-state': '状态图',
+                'example-state-desc': '状态转换和生命周期',
+                'example-pie': '饼图',
+                'example-pie-desc': '数据占比和分布展示',
+                'code-placeholder': '在此输入 Mermaid 代码...\n\n示例：\ngraph TD\n    A[开始] --> B[处理数据]\n    B --> C{判断条件}\n    C -->|是| D[执行操作A]\n    C -->|否| E[执行操作B]\n    D --> F[结束]\n    E --> F',
+                'file-uploaded': '文件上传成功！',
+                'file-upload-failed': '文件上传失败',
+                'render-success': '图表渲染成功！',
+                'render-failed': '渲染失败',
+                'download-success': '下载成功！',
+                'download-failed': '下载失败',
+                'code-cleared': '代码已清空',
+                'confirm-clear': '确定要清空所有代码吗？',
+                'no-diagram': '请先生成图表',
+                'no-code': '请先输入代码'
+            },
+            'en': {
+                'subtitle': 'Create beautiful flowcharts, sequence diagrams and more - Live preview, one-click export',
+                'lines': 'Lines',
+                'chars': 'Characters',
+                'status': 'Status',
+                'ready': 'Ready',
+                'dark-mode': 'Dark Mode',
+                'light-mode': 'Light Mode',
+                'upload-file': 'Upload File',
+                'download-svg': 'Download SVG',
+                'download-png': 'Download PNG',
+                'download-mmd': 'Download .mmd',
+                'clear': 'Clear Code',
+                'code-editor': 'Code Editor',
+                'rendering': 'Rendering',
+                'live-preview': 'Live Preview',
+                'preview-placeholder': 'Enter code on the left to see preview',
+                'examples-title': '📚 Example Templates',
+                'example-flowchart': 'Flowchart',
+                'example-flowchart-desc': 'Basic flowchart example showing decisions and processes',
+                'example-sequence': 'Sequence Diagram',
+                'example-sequence-desc': 'Show interactions and timing between systems',
+                'example-gantt': 'Gantt Chart',
+                'example-gantt-desc': 'Project timeline planning and progress management',
+                'example-class': 'Class Diagram',
+                'example-class-desc': 'Object-oriented design and class relationships',
+                'example-state': 'State Diagram',
+                'example-state-desc': 'State transitions and lifecycle',
+                'example-pie': 'Pie Chart',
+                'example-pie-desc': 'Data proportion and distribution display',
+                'code-placeholder': 'Enter Mermaid code here...\n\nExample:\ngraph TD\n    A[Start] --> B[Process Data]\n    B --> C{Decision}\n    C -->|Yes| D[Action A]\n    C -->|No| E[Action B]\n    D --> F[End]\n    E --> F',
+                'file-uploaded': 'File uploaded successfully!',
+                'file-upload-failed': 'File upload failed',
+                'render-success': 'Diagram rendered successfully!',
+                'render-failed': 'Render failed',
+                'download-success': 'Download successful!',
+                'download-failed': 'Download failed',
+                'code-cleared': 'Code cleared',
+                'confirm-clear': 'Are you sure you want to clear all code?',
+                'no-diagram': 'Please generate a diagram first',
+                'no-code': 'Please enter code first'
+            }
+        };
+
+        // 应用状态
+        let currentLang = localStorage.getItem('mermaid-editor-lang') || 'zh-CN';
+        let currentTheme = localStorage.getItem('mermaid-editor-theme') || 'light';
+        let mermaidLoaded = false;
+
+        // 等待Mermaid加载完成
+        function waitForMermaid() {
+            return new Promise((resolve) => {
+                if (typeof mermaid !== 'undefined') {
+                    resolve();
+                    return;
+                }
+                
+                const checkMermaid = () => {
+                    if (typeof mermaid !== 'undefined') {
+                        resolve();
+                    } else {
+                        setTimeout(checkMermaid, 100);
+                    }
+                };
+                checkMermaid();
+            });
+        }
+
+        // 初始化应用
+        async function initApp() {
+            console.log('开始初始化应用...');
+            
+            // 设置初始主题和语言
+            applyTheme(currentTheme);
+            applyLanguage(currentLang);
+            
+            // 等待Mermaid加载
+            await waitForMermaid();
+            
+            // 初始化Mermaid
+            try {
+                mermaid.initialize({
+                    startOnLoad: false,
+                    theme: currentTheme === 'dark' ? 'dark' : 'default',
+                    securityLevel: 'loose',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, Inter, SF Pro Display, sans-serif',
+                    flowchart: {
+                        htmlLabels: true,
+                        curve: 'basis'
+                    }
+                });
+                mermaidLoaded = true;
+                console.log('Mermaid初始化成功');
+            } catch (error) {
+                console.error('Mermaid初始化失败:', error);
+            }
+
+            // 绑定事件
+            bindEvents();
+            
+            // 初始化统计
+            updateStats();
+            
+            // 延迟渲染初始代码
+            setTimeout(() => {
+                renderDiagram();
+            }, 200);
+            
+            console.log('应用初始化完成');
+        }
+
+        // 应用主题
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const themeIcon = document.getElementById('themeIcon');
+            const themeName = document.querySelector('[data-lang-key="dark-mode"], [data-lang-key="light-mode"]');
+            
+            if (theme === 'dark') {
+                themeIcon.textContent = '☀️';
+                if (themeName) themeName.setAttribute('data-lang-key', 'light-mode');
+            } else {
+                themeIcon.textContent = '🌙';
+                if (themeName) themeName.setAttribute('data-lang-key', 'dark-mode');
+            }
+            
+            // 如果Mermaid已加载，重新初始化主题
+            if (mermaidLoaded) {
+                mermaid.initialize({
+                    startOnLoad: false,
+                    theme: theme === 'dark' ? 'dark' : 'default',
+                    securityLevel: 'loose',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, Inter, SF Pro Display, sans-serif'
+                });
+                // 重新渲染图表
+                setTimeout(renderDiagram, 100);
+            }
+        }
+
+        // 应用语言
+        function applyLanguage(lang) {
+            document.documentElement.lang = lang;
+            const langText = document.getElementById('langText');
+            langText.textContent = lang === 'zh-CN' ? 'English' : '中文';
+            
+            // 更新所有带有data-lang-key的元素
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (i18n[lang] && i18n[lang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = i18n[lang][key];
+                    } else {
+                        element.textContent = i18n[lang][key];
+                    }
+                }
+            });
+        }
+
+        // 显示通知
+        function showNotification(message, type = 'info', duration = 3000) {
+            const notification = document.getElementById('notification');
+            const messageEl = document.getElementById('notificationMessage');
+            
+            messageEl.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, duration);
+        }
+
+        // 获取当前语言的文本
+        function t(key) {
+            return i18n[currentLang] && i18n[currentLang][key] || key;
+        }
+
+        // DOM元素
+        let codeEditor, previewContainer, errorMessage, successMessage, loading;
+        let lineCount, charCount, renderStatus;
+
+        // 绑定事件
+        function bindEvents() {
+            // 获取DOM元素
+            codeEditor = document.getElementById('mermaidCode');
+            previewContainer = document.getElementById('mermaidPreview');
+            errorMessage = document.getElementById('errorMessage');
+            successMessage = document.getElementById('successMessage');
+            loading = document.getElementById('loading');
+            lineCount = document.getElementById('lineCount');
+            charCount = document.getElementById('charCount');
+            renderStatus = document.getElementById('renderStatus');
+
+            // 主题切换
+            document.getElementById('themeToggle').addEventListener('click', () => {
+                currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+                localStorage.setItem('mermaid-editor-theme', currentTheme);
+                applyTheme(currentTheme);
+            });
+
+            // 语言切换
+            document.getElementById('langToggle').addEventListener('click', () => {
+                currentLang = currentLang === 'zh-CN' ? 'en' : 'zh-CN';
+                localStorage.setItem('mermaid-editor-lang', currentLang);
+                applyLanguage(currentLang);
+            });
+
+            // 代码编辑器输入事件
+            codeEditor.addEventListener('input', debounce(() => {
+                updateStats();
+                renderDiagram();
+            }, 600));
+
+            // 文件上传
+            document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+
+            // 下载按钮
+            document.getElementById('downloadSvg').addEventListener('click', () => downloadFile('svg'));
+            document.getElementById('downloadPng').addEventListener('click', () => downloadFile('png'));
+            document.getElementById('downloadMmd').addEventListener('click', () => downloadFile('mmd'));
+
+            // 清空按钮
+            document.getElementById('clearBtn').addEventListener('click', clearCode);
+
+            // 示例点击
+            document.querySelectorAll('.example-item').forEach(item => {
+                item.addEventListener('click', () => loadExample(item.dataset.example));
+            });
+        }
+
+        // 示例代码
+        const examples = {
+            flowchart: {
+                'zh-CN': `graph TD
+    A[客户请求] --> B[验证身份]
+    B --> C{验证成功?}
+    C -->|是| D[处理请求]
+    C -->|否| E[拒绝访问]
+    D --> F[返回结果]
+    E --> G[记录日志]
+    F --> H[结束]
+    G --> H`,
+                'en': `graph TD
+    A[Client Request] --> B[Verify Identity]
+    B --> C{Verification Success?}
+    C -->|Yes| D[Process Request]
+    C -->|No| E[Deny Access]
+    D --> F[Return Result]
+    E --> G[Log Event]
+    F --> H[End]
+    G --> H`
+            },
+            sequence: {
+                'zh-CN': `sequenceDiagram
+    participant 用户
+    participant 前端
+    participant 后端
+    participant 数据库
+    
+    用户->>前端: 发送请求
+    前端->>后端: 转发请求
+    后端->>数据库: 查询数据
+    数据库-->>后端: 返回结果
+    后端-->>前端: 处理结果
+    前端-->>用户: 显示页面`,
+                'en': `sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant Database
+    
+    User->>Frontend: Send Request
+    Frontend->>Backend: Forward Request
+    Backend->>Database: Query Data
+    Database-->>Backend: Return Result
+    Backend-->>Frontend: Process Result
+    Frontend-->>User: Display Page`
+            },
+            gantt: {
+                'zh-CN': `gantt
+    title 项目开发进度
+    dateFormat  YYYY-MM-DD
+    section 设计阶段
+    需求分析           :des1, 2024-01-01, 2024-01-07
+    UI设计            :des2, after des1, 10d
+    section 开发阶段
+    前端开发          :dev1, 2024-01-15, 20d
+    后端开发          :dev2, after des2, 25d
+    section 测试阶段
+    单元测试          :test1, after dev1, 10d
+    集成测试          :test2, after dev2, 15d`,
+                'en': `gantt
+    title Project Development Progress
+    dateFormat  YYYY-MM-DD
+    section Design Phase
+    Requirements Analysis    :des1, 2024-01-01, 2024-01-07
+    UI Design               :des2, after des1, 10d
+    section Development Phase
+    Frontend Development    :dev1, 2024-01-15, 20d
+    Backend Development     :dev2, after des2, 25d
+    section Testing Phase
+    Unit Testing           :test1, after dev1, 10d
+    Integration Testing    :test2, after dev2, 15d`
+            },
+            class: {
+                'zh-CN': `classDiagram
+    class Animal {
+        +String name
+        +int age
+        +makeSound()
+        +move()
+    }
+    class Dog {
+        +String breed
+        +bark()
+        +wagTail()
+    }
+    class Cat {
+        +String furColor
+        +meow()
+        +purr()
+    }
+    Animal <|-- Dog
+    Animal <|-- Cat`,
+                'en': `classDiagram
+    class Animal {
+        +String name
+        +int age
+        +makeSound()
+        +move()
+    }
+    class Dog {
+        +String breed
+        +bark()
+        +wagTail()
+    }
+    class Cat {
+        +String furColor
+        +meow()
+        +purr()
+    }
+    Animal <|-- Dog
+    Animal <|-- Cat`
+            },
+            state: {
+                'zh-CN': `stateDiagram-v2
+    [*] --> 待机
+    待机 --> 工作中 : 开始工作
+    工作中 --> 暂停 : 暂停
+    暂停 --> 工作中 : 继续
+    工作中 --> 完成 : 任务完成
+    完成 --> [*]
+    工作中 --> 错误 : 出现错误
+    错误 --> 待机 : 重置`,
+                'en': `stateDiagram-v2
+    [*] --> Idle
+    Idle --> Working : Start Work
+    Working --> Paused : Pause
+    Paused --> Working : Resume
+    Working --> Completed : Task Done
+    Completed --> [*]
+    Working --> Error : Error Occurs
+    Error --> Idle : Reset`
+            },
+            pie: {
+                'zh-CN': `pie title 编程语言使用占比
+    "JavaScript" : 42.96
+    "Python" : 23.15
+    "Java" : 18.47
+    "C++" : 8.32
+    "其他" : 7.10`,
+                'en': `pie title Programming Language Usage
+    "JavaScript" : 42.96
+    "Python" : 23.15
+    "Java" : 18.47
+    "C++" : 8.32
+    "Others" : 7.10`
+            }
+        };
+
+        // 防抖函数
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // 更新统计信息
+        function updateStats() {
+            const code = codeEditor.value;
+            const lines = code.split('\n').length;
+            const chars = code.length;
+            
+            lineCount.textContent = lines;
+            charCount.textContent = chars;
+        }
+
+        // 显示消息
+        function showMessage(message, type = 'success') {
+            const messageEl = type === 'error' ? errorMessage : successMessage;
+            const otherEl = type === 'error' ? successMessage : errorMessage;
+            
+            messageEl.textContent = message;
+            messageEl.style.display = 'block';
+            otherEl.style.display = 'none';
+            
+            renderStatus.textContent = type === 'error' ? t('render-failed') : t('render-success');
+        }
+
+        // 隐藏消息
+        function hideMessages() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+        }
+
+        // 渲染图表
+        async function renderDiagram() {
+            if (!mermaidLoaded) {
+                console.log('Mermaid未加载完成，等待中...');
+                return;
+            }
+
+            const code = codeEditor.value.trim();
+            
+            if (!code) {
+                previewContainer.innerHTML = `<div class="preview-placeholder">${t('preview-placeholder')}</div>`;
+                hideMessages();
+                renderStatus.textContent = t('ready');
+                return;
+            }
+
+            try {
+                loading.style.display = 'inline';
+                hideMessages();
+                renderStatus.textContent = t('rendering');
+                
+                previewContainer.innerHTML = `<div class="preview-placeholder">${t('rendering')}...</div>`;
+                
+                const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                
+                console.log('开始渲染图表，ID:', uniqueId);
+                const { svg } = await mermaid.render(uniqueId, code);
+                
+                previewContainer.innerHTML = svg;
+                showMessage(t('render-success'), 'success');
+                
+            } catch (error) {
+                console.error('渲染错误:', error);
+                showMessage(`${t('render-failed')}: ${error.message}`, 'error');
+                previewContainer.innerHTML = `<div style="color: var(--accent-red); text-align: center; padding: 20px;">❌ ${t('render-failed')}</div>`;
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        // 处理文件上传
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                try {
+                    codeEditor.value = e.target.result;
+                    updateStats();
+                    renderDiagram();
+                    showNotification(`${t('file-uploaded')}: ${file.name}`, 'success');
+                } catch (error) {
+                    showNotification(`${t('file-upload-failed')}: ${error.message}`, 'error');
+                }
+            };
+
+            reader.onerror = () => {
+                showNotification(t('file-upload-failed'), 'error');
+            };
+
+            reader.readAsText(file);
+        }
+
+        // 下载文件
+        function downloadFile(type) {
+            try {
+                if (type === 'mmd') {
+                    const code = codeEditor.value;
+                    if (!code.trim()) {
+                        showNotification(t('no-code'), 'error');
+                        return;
+                    }
+                    
+                    const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `diagram-${Date.now()}.mmd`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                    
+                } else {
+                    const svgElement = previewContainer.querySelector('svg');
+                    if (!svgElement) {
+                        showNotification(t('no-diagram'), 'error');
+                        return;
+                    }
+
+                    if (type === 'svg') {
+                        const svgData = new XMLSerializer().serializeToString(svgElement);
+                        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                        const url = URL.createObjectURL(svgBlob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `mermaid-diagram-${Date.now()}.svg`;
+                        link.click();
+                        URL.revokeObjectURL(url);
+                        
+                    } else if (type === 'png') {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const img = new Image();
+                        
+                        const svgData = new XMLSerializer().serializeToString(svgElement);
+                        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                        const url = URL.createObjectURL(svgBlob);
+                        
+                        img.onload = () => {
+                            canvas.width = img.width * 2;
+                            canvas.height = img.height * 2;
+                            ctx.scale(2, 2);
+                            ctx.fillStyle = currentTheme === 'dark' ? '#1c1c1e' : 'white';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(img, 0, 0);
+                            
+                            canvas.toBlob((blob) => {
+                                const link = document.createElement('a');
+                                link.href = URL.createObjectURL(blob);
+                                link.download = `mermaid-diagram-${Date.now()}.png`;
+                                link.click();
+                                URL.revokeObjectURL(link.href);
+                            });
+                            
+                            URL.revokeObjectURL(url);
+                        };
+                        
+                        img.src = url;
+                    }
+                }
+                
+                showNotification(t('download-success'), 'success');
+                
+            } catch (error) {
+                showNotification(`${t('download-failed')}: ${error.message}`, 'error');
+            }
+        }
+
+        // 清空代码
+        function clearCode() {
+            if (confirm(t('confirm-clear'))) {
+                codeEditor.value = '';
+                previewContainer.innerHTML = `<div class="preview-placeholder">${t('preview-placeholder')}</div>`;
+                hideMessages();
+                updateStats();
+                renderStatus.textContent = t('ready');
+                showNotification(t('code-cleared'), 'info');
+            }
+        }
+
+        // 加载示例
+        function loadExample(type) {
+            if (examples[type] && examples[type][currentLang]) {
+                codeEditor.value = examples[type][currentLang];
+                updateStats();
+                renderDiagram();
+                showNotification(`${t('example-' + type)} ${t('render-success')}`, 'success');
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
