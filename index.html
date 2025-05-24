@@ -603,6 +603,68 @@
             outline: none;
             box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.25);
         }
+
+        /* 作者信息样式 */
+        .author-info {
+            margin-top: 40px;
+            padding: 24px;
+            text-align: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px var(--shadow-light);
+        }
+
+        .author-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .author-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .author-text strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .github-link:hover {
+            background: var(--accent-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .author-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -735,6 +797,19 @@ graph TD
                 </div>
             </div>
         </div>
+
+        <!-- 作者信息 -->
+        <div class="author-info">
+            <div class="author-content">
+                <p class="author-text" data-lang-key="author-info">
+                    Made with ❤️ by <strong>Steven Chen</strong>
+                </p>
+                <a href="https://github.com/StevenChen16" target="_blank" class="github-link">
+                    <span>🔗</span>
+                    <span data-lang-key="github-link">GitHub</span>
+                </a>
+            </div>
+        </div>
     </div>
 
     <!-- 通知组件 -->
@@ -789,7 +864,9 @@ graph TD
                 'code-cleared': '代码已清空',
                 'confirm-clear': '确定要清空所有代码吗？',
                 'no-diagram': '请先生成图表',
-                'no-code': '请先输入代码'
+                'no-code': '请先输入代码',
+                'author-info': '由 Steven Chen ❤️ 制作',
+                'github-link': 'GitHub'
             },
             'en': {
                 'subtitle': 'Create beautiful flowcharts, sequence diagrams and more - Live preview, one-click export',
@@ -832,7 +909,9 @@ graph TD
                 'code-cleared': 'Code cleared',
                 'confirm-clear': 'Are you sure you want to clear all code?',
                 'no-diagram': 'Please generate a diagram first',
-                'no-code': 'Please enter code first'
+                'no-code': 'Please enter code first',
+                'author-info': 'Made with ❤️ by Steven Chen',
+                'github-link': 'GitHub'
             }
         };
 
@@ -881,10 +960,17 @@ graph TD
                     flowchart: {
                         htmlLabels: true,
                         curve: 'basis'
-                    }
+                    },
+                    // 防止错误消息显示在页面上
+                    suppressErrorRendering: true,
+                    logLevel: 'error'
                 });
                 mermaidLoaded = true;
                 console.log('Mermaid初始化成功');
+                
+                // 定期清理可能的错误消息
+                setInterval(clearMermaidErrorMessages, 1000);
+                
             } catch (error) {
                 console.error('Mermaid初始化失败:', error);
             }
@@ -1226,6 +1312,8 @@ graph TD
                 previewContainer.innerHTML = `<div class="preview-placeholder">${t('preview-placeholder')}</div>`;
                 hideMessages();
                 renderStatus.textContent = t('ready');
+                // 清除可能的Mermaid错误消息
+                clearMermaidErrorMessages();
                 return;
             }
 
@@ -1235,6 +1323,9 @@ graph TD
                 renderStatus.textContent = t('rendering');
                 
                 previewContainer.innerHTML = `<div class="preview-placeholder">${t('rendering')}...</div>`;
+                
+                // 清除之前的Mermaid错误消息
+                clearMermaidErrorMessages();
                 
                 const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
                 
@@ -1246,11 +1337,46 @@ graph TD
                 
             } catch (error) {
                 console.error('渲染错误:', error);
-                showMessage(`${t('render-failed')}: ${error.message}`, 'error');
-                previewContainer.innerHTML = `<div style="color: var(--accent-red); text-align: center; padding: 20px;">❌ ${t('render-failed')}</div>`;
+                
+                // 清除Mermaid可能插入的错误消息
+                clearMermaidErrorMessages();
+                
+                // 提取更友好的错误信息
+                let errorMsg = error.message || error.toString();
+                if (errorMsg.includes('Syntax error in text')) {
+                    errorMsg = currentLang === 'zh-CN' ? '语法错误：请检查代码格式' : 'Syntax Error: Please check your code format';
+                } else if (errorMsg.includes('Parse error on line')) {
+                    const lineMatch = errorMsg.match(/line (\d+)/);
+                    const lineNum = lineMatch ? lineMatch[1] : '?';
+                    errorMsg = currentLang === 'zh-CN' ? `第${lineNum}行有语法错误` : `Syntax error on line ${lineNum}`;
+                }
+                
+                showMessage(`${t('render-failed')}: ${errorMsg}`, 'error');
+                previewContainer.innerHTML = `<div style="color: var(--accent-red); text-align: center; padding: 20px;">❌ ${errorMsg}</div>`;
             } finally {
                 loading.style.display = 'none';
             }
+        }
+
+        // 清除Mermaid在页面中插入的错误消息
+        function clearMermaidErrorMessages() {
+            // 清除可能的错误消息元素
+            const errorElements = document.querySelectorAll('[id^="dmermaid"], .mermaidTooltip, .error');
+            errorElements.forEach(element => {
+                if (element.textContent && element.textContent.includes('Syntax error in text')) {
+                    element.remove();
+                }
+            });
+            
+            // 清除可能在body底部的错误消息
+            const bodyChildren = Array.from(document.body.children);
+            bodyChildren.forEach(child => {
+                if (child.textContent && 
+                    (child.textContent.includes('Syntax error in text') || 
+                     child.textContent.includes('mermaid version'))) {
+                    child.remove();
+                }
+            });
         }
 
         // 处理文件上传
