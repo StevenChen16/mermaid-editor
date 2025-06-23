@@ -695,7 +695,7 @@
             position: absolute;
             top: 0;
             left: 100%;
-            margin-left: 12px;
+            margin-left: 30px;
             background: var(--card-bg);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
@@ -909,8 +909,8 @@ graph TD
         <div id="notificationMessage"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@latest/dist/jspdf.umd.min.js"></script>
     
     <script>
         // 国际化语言包
@@ -958,7 +958,24 @@ graph TD
                 'no-diagram': '请先生成图表',
                 'no-code': '请先输入代码',
                 'author-info': '由 Steven Chen ❤️ 制作',
-                'github-link': 'GitHub'
+                'github-link': 'GitHub',
+                'chart-types': {
+                    'flowchart': '流程图',
+                    'graph': '流程图', 
+                    'sequence': '时序图',
+                    'gantt': '甘特图',
+                    'classDiagram': '类图',
+                    'stateDiagram': '状态图',
+                    'pie': '饼图',
+                    'journey': '用户旅程图',
+                    'gitgraph': 'Git图',
+                    'erDiagram': '实体关系图',
+                    'mindmap': '思维导图',
+                    'quadrantChart': '象限图',
+                    'requirementDiagram': '需求图',
+                    'c4Diagram': 'C4图',
+                    'unknown': '未知图表'
+                }
             },
             'en': {
                 'subtitle': 'Create beautiful flowcharts, sequence diagrams and more - Completely free, no registration required, live preview, one-click export',
@@ -1003,7 +1020,24 @@ graph TD
                 'no-diagram': 'Please generate a diagram first',
                 'no-code': 'Please enter code first',
                 'author-info': 'Made with ❤️ by Steven Chen',
-                'github-link': 'GitHub'
+                'github-link': 'GitHub',
+                'chart-types': {
+                    'flowchart': 'Flowchart',
+                    'graph': 'Flowchart',
+                    'sequence': 'Sequence Diagram', 
+                    'gantt': 'Gantt Chart',
+                    'classDiagram': 'Class Diagram',
+                    'stateDiagram': 'State Diagram',
+                    'pie': 'Pie Chart',
+                    'journey': 'User Journey',
+                    'gitgraph': 'Git Graph',
+                    'erDiagram': 'ER Diagram',
+                    'mindmap': 'Mindmap',
+                    'quadrantChart': 'Quadrant Chart',
+                    'requirementDiagram': 'Requirement Diagram',
+                    'c4Diagram': 'C4 Diagram',
+                    'unknown': 'Unknown Chart'
+                }
             },
             'fr': {
                 'subtitle': 'Créez de beaux diagrammes de flux, diagrammes de séquence et plus - Complètement gratuit, aucune inscription requise, aperçu en temps réel, export en un clic',
@@ -1048,7 +1082,24 @@ graph TD
                 'no-diagram': 'Veuillez d\'abord générer un diagramme',
                 'no-code': 'Veuillez d\'abord entrer le code',
                 'author-info': 'Créé avec ❤️ par Steven Chen',
-                'github-link': 'GitHub'
+                'github-link': 'GitHub',
+                'chart-types': {
+                    'flowchart': 'Diagramme de flux',
+                    'graph': 'Diagramme de flux',
+                    'sequence': 'Diagramme de séquence',
+                    'gantt': 'Diagramme de Gantt',
+                    'classDiagram': 'Diagramme de classe',
+                    'stateDiagram': 'Diagramme d\'état',
+                    'pie': 'Diagramme circulaire',
+                    'journey': 'Parcours utilisateur',
+                    'gitgraph': 'Graphique Git',
+                    'erDiagram': 'Diagramme ER',
+                    'mindmap': 'Carte mentale',
+                    'quadrantChart': 'Graphique quadrant',
+                    'requirementDiagram': 'Diagramme d\'exigences',
+                    'c4Diagram': 'Diagramme C4',
+                    'unknown': 'Graphique inconnu'
+                }
             },
             'es': {
                 'subtitle': 'Crea hermosos diagramas de flujo, diagramas de secuencia y más - Completamente gratis, sin registro requerido, vista previa en vivo, exportación con un clic',
@@ -1093,7 +1144,24 @@ graph TD
                 'no-diagram': 'Por favor genera un diagrama primero',
                 'no-code': 'Por favor ingresa código primero',
                 'author-info': 'Hecho con ❤️ por Steven Chen',
-                'github-link': 'GitHub'
+                'github-link': 'GitHub',
+                'chart-types': {
+                    'flowchart': 'Diagrama de flujo',
+                    'graph': 'Diagrama de flujo',
+                    'sequence': 'Diagrama de secuencia',
+                    'gantt': 'Diagrama de Gantt',
+                    'classDiagram': 'Diagrama de clase',
+                    'stateDiagram': 'Diagrama de estado',
+                    'pie': 'Gráfico circular',
+                    'journey': 'Viaje del usuario',
+                    'gitgraph': 'Gráfico Git',
+                    'erDiagram': 'Diagrama ER',
+                    'mindmap': 'Mapa mental',
+                    'quadrantChart': 'Gráfico cuadrante',
+                    'requirementDiagram': 'Diagrama de requisitos',
+                    'c4Diagram': 'Diagrama C4',
+                    'unknown': 'Gráfico desconocido'
+                }
             },
             'ja': {
                 'subtitle': '美しいフローチャート、シーケンス図などを作成 - 完全無料、登録不要、リアルタイムプレビュー、ワンクリックエクスポート',
@@ -1138,7 +1206,24 @@ graph TD
                 'no-diagram': '最初に図表を生成してください',
                 'no-code': '最初にコードを入力してください',
                 'author-info': 'Steven Chen が ❤️ をこめて制作',
-                'github-link': 'GitHub'
+                'github-link': 'GitHub',
+                'chart-types': {
+                    'flowchart': 'フローチャート',
+                    'graph': 'フローチャート',
+                    'sequence': 'シーケンス図',
+                    'gantt': 'ガントチャート',
+                    'classDiagram': 'クラス図',
+                    'stateDiagram': 'ステート図',
+                    'pie': '円グラフ',
+                    'journey': 'ユーザージャーニー',
+                    'gitgraph': 'Gitグラフ',
+                    'erDiagram': 'ER図',
+                    'mindmap': 'マインドマップ',
+                    'quadrantChart': '象限チャート',
+                    'requirementDiagram': '要件図',
+                    'c4Diagram': 'C4図',
+                    'unknown': '不明なチャート'
+                }
             },
             'de': {
                 'subtitle': 'Erstellen Sie schöne Flussdiagramme, Sequenzdiagramme und mehr - Völlig kostenlos, keine Registrierung erforderlich, Live-Vorschau, Ein-Klick-Export',
@@ -1183,7 +1268,24 @@ graph TD
                 'no-diagram': 'Bitte erstellen Sie zuerst ein Diagramm',
                 'no-code': 'Bitte geben Sie zuerst Code ein',
                 'author-info': 'Mit ❤️ erstellt von Steven Chen',
-                'github-link': 'GitHub'
+                'github-link': 'GitHub',
+                'chart-types': {
+                    'flowchart': 'Flussdiagramm',
+                    'graph': 'Flussdiagramm',
+                    'sequence': 'Sequenzdiagramm',
+                    'gantt': 'Gantt-Diagramm',
+                    'classDiagram': 'Klassendiagramm',
+                    'stateDiagram': 'Zustandsdiagramm',
+                    'pie': 'Kreisdiagramm',
+                    'journey': 'Benutzerreise',
+                    'gitgraph': 'Git-Graph',
+                    'erDiagram': 'ER-Diagramm',
+                    'mindmap': 'Mindmap',
+                    'quadrantChart': 'Quadrantendiagramm',
+                    'requirementDiagram': 'Anforderungsdiagramm',
+                    'c4Diagram': 'C4-Diagramm',
+                    'unknown': 'Unbekanntes Diagramm'
+                }
             },
             'ru': {
                 'subtitle': 'Создавайте красивые блок-схемы, диаграммы последовательности и многое другое - Совершенно бесплатно, без регистрации, живой предпросмотр, экспорт одним кликом',
@@ -1228,7 +1330,24 @@ graph TD
                 'no-diagram': 'Пожалуйста, сначала создайте диаграмму',
                 'no-code': 'Пожалуйста, сначала введите код',
                 'author-info': 'Создано с ❤️ Steven Chen',
-                'github-link': 'GitHub'
+                'github-link': 'GitHub',
+                'chart-types': {
+                    'flowchart': 'Блок-схема',
+                    'graph': 'Блок-схема',
+                    'sequence': 'Диаграмма последовательности',
+                    'gantt': 'Диаграмма Ганта',
+                    'classDiagram': 'Диаграмма классов',
+                    'stateDiagram': 'Диаграмма состояний',
+                    'pie': 'Круговая диаграмма',
+                    'journey': 'Путешествие пользователя',
+                    'gitgraph': 'Git-граф',
+                    'erDiagram': 'ER-диаграмма',
+                    'mindmap': 'Интеллект-карта',
+                    'quadrantChart': 'Квадрантная диаграмма',
+                    'requirementDiagram': 'Диаграмма требований',
+                    'c4Diagram': 'C4-диаграмма',
+                    'unknown': 'Неизвестная диаграмма'
+                }
             }
         };
 
@@ -1380,6 +1499,17 @@ graph TD
                     }
                 }
             });
+            
+            // 重新检测并更新图表类型显示（如果当前有图表的话）
+            const code = codeEditor?.value?.trim();
+            if (code && mermaidLoaded) {
+                try {
+                    const diagramType = mermaid.detectType(code);
+                    updatePreviewTitle(diagramType);
+                } catch (error) {
+                    updatePreviewTitle();
+                }
+            }
         }
 
         // 显示通知
@@ -1399,6 +1529,25 @@ graph TD
         // 获取当前语言的文本
         function t(key) {
             return i18n[currentLang] && i18n[currentLang][key] || key;
+        }
+
+        // 更新预览标题
+        function updatePreviewTitle(diagramType = null) {
+            const previewTitle = document.querySelector('[data-lang-key="live-preview"]');
+            if (!previewTitle) return;
+            
+            const baseText = t('live-preview'); // 获取当前语言的"实时预览"文本
+            
+            if (diagramType && i18n[currentLang]?.['chart-types']?.[diagramType]) {
+                const chartTypeName = i18n[currentLang]['chart-types'][diagramType];
+                previewTitle.textContent = `${baseText} - ${chartTypeName}`;
+            } else if (diagramType) {
+                // 如果类型存在但没有翻译，显示原始类型
+                previewTitle.textContent = `${baseText} - ${diagramType}`;
+            } else {
+                // 没有图表时，只显示基础文本
+                previewTitle.textContent = baseText;
+            }
         }
 
         // DOM元素
@@ -1709,7 +1858,8 @@ graph TD
                 previewContainer.innerHTML = `<div class="preview-placeholder">${t('preview-placeholder')}</div>`;
                 hideMessages();
                 renderStatus.textContent = t('ready');
-                // 清除可能的Mermaid错误消息
+                // 清空图表类型显示
+                updatePreviewTitle();
                 clearMermaidErrorMessages();
                 return;
             }
@@ -1724,6 +1874,16 @@ graph TD
                 // 清除之前的Mermaid错误消息
                 clearMermaidErrorMessages();
                 
+                // 检测图表类型
+                let diagramType = null;
+                try {
+                    diagramType = mermaid.detectType(code);
+                    console.log('检测到的图表类型:', diagramType);
+                } catch (detectError) {
+                    console.warn('无法检测图表类型:', detectError);
+                    diagramType = 'unknown';
+                }
+                
                 const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
                 
                 console.log('开始渲染图表，ID:', uniqueId);
@@ -1731,6 +1891,9 @@ graph TD
                 
                 previewContainer.innerHTML = svg;
                 showMessage(t('render-success'), 'success');
+                
+                // 更新预览标题，显示图表类型
+                updatePreviewTitle(diagramType);
                 
             } catch (error) {
                 console.error('渲染错误:', error);
@@ -1750,6 +1913,9 @@ graph TD
                 
                 showMessage(`${t('render-failed')}: ${errorMsg}`, 'error');
                 previewContainer.innerHTML = `<div style="color: var(--accent-red); text-align: center; padding: 20px;">❌ ${errorMsg}</div>`;
+                
+                // 错误时清空图表类型显示
+                updatePreviewTitle();
             } finally {
                 loading.style.display = 'none';
             }
