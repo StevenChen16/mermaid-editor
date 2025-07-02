@@ -67,12 +67,12 @@ This project uses:
 
 ## Author | 作者
 
-Made with ❤️ by **Steven Chen**
+Made by **Steven Chen**
 
-由 **Steven Chen** 用 ❤️ 制作
+由 **Steven Chen** 制作
 
 ## License | 许可证
 
-MIT License
+[MIT License](LICENSE)
 
-MIT 开源许可证
+[MIT 开源许可证](LICENSE)
